@@ -1,0 +1,5 @@
+#ifndef IFIGURECREATOR
+#define IFIGURECREATOR
+
+#endif // IFIGURECREATOR
+
