@@ -1,7 +1,5 @@
 #include "iboard.h"
 
-IBoard::IBoard(QObject *parent) : QObject(parent)
+IBoard::IBoard( QObject *parent) : QObject(parent)
 {
-
 }
-

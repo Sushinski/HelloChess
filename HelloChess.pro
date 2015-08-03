@@ -13,8 +13,23 @@ TEMPLATE = app
 
 
 SOURCES += main.cpp\
-        mainwindow.cpp
+        mainwindow.cpp \
+    iboard.cpp \
+    ifigure.cpp \
+    turnhistory.cpp \
+    test_main.cpp \
+    test_pointer_class.cpp \
+    chessboard.cpp
 
-HEADERS  += mainwindow.h
+HEADERS  += mainwindow.h \
+    iboard.h \
+    ifigure.h \
+    turnhistory.h \
+    test_pointer_class.h \
+    chessboard.h \
+    ifigurecreator.h
 
 FORMS    += mainwindow.ui
+
+DISTFILES += \
+    tests
