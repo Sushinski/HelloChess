@@ -2,7 +2,7 @@
 #define CHESSBOARD_H
 #include "iboard.h"
 
-
+class IFigure;
 class ChessBoard : public IBoard
 {
 public:
@@ -17,6 +17,7 @@ public slots:
     virtual bool cellClick(int row, int column);
 private:
     int m_board_size;
+    QVector< QVector< QSharedPointer<IFigure> > > m_board;
 };
 
 #endif // CHESSBOARD_H

@@ -19,8 +19,6 @@ signals:
     virtual void figureChanged(int row, int column) = 0;
 public slots:
     virtual bool cellClick(int row, int column) = 0;
-private:
-    QSharedPointer<IFigure*[][]> m_board;
 };
 
 #endif // IBOARD_H

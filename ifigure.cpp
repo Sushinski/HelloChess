@@ -1,7 +1,8 @@
 #include "ifigure.h"
 #include "ifigurecreator.h"
 
-IFigure::IFigure( const IParam& param, QSize coords ) : m_coords(coords)
+IFigure::IFigure( const IParam& param, QSize coords ) :
+m_coords(coords)
 {
 
 }

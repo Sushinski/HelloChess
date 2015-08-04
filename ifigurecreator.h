@@ -25,7 +25,7 @@ public:
 class ChessParam : public IParam
 {
 public:
-    ChessParam(QSzie _coords, bool _bwhite ) : IParam(_coords), m_b_white(_bwhite){}
+    ChessParam(QSize _coords, bool _bwhite ) : IParam(_coords), m_b_white(_bwhite){}
     bool m_b_white;
 };
 
