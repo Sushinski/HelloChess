@@ -1,6 +1,7 @@
 #ifndef IFIGURECREATOR
 #define IFIGURECREATOR
 #include <QSize>
+#include <QSharedPointer>
 
 class IParam;
 class IFigure;
@@ -10,10 +11,6 @@ class Knight;
 class Bishop;
 class Queen;
 class King;
-class IFigureCreator{
-public:
-    virtual IFigure* createFigure(const IParam& param) = 0;
-};
 
 class IParam
 {
@@ -29,42 +26,19 @@ public:
     bool m_b_white;
 };
 
+template<typename P>
+class IFigureCreator{
+public:
+    virtual QSharedPointer<IFigure> createFigure(const P& param) = 0;
+    virtual ~IFigureCreator(){}
+};
+
+
 template<typename T>
-class ChessCreator : public IFigureCreator
+class ChessCreator : public IFigureCreator<ChessParam>
 {
 public:
-    IFigure* createFigure( const IParam& param ){ return new T(param); }
-};
-/*
-class PawnCreator : public IFigureCreator
-{
-public:
-    IFigure* createFigure( const IParam& param ){ return new Pawn(param); }
+    QSharedPointer<IFigure> createFigure( const ChessParam& param ){ return QSharedPointer<IFigure>(new T(param)); }
 };
 
-class RookCreator : public IFigureCreator
-{
-    IFigure* createFigure( const IParam& param ){ return Rook(param); }
-};
-
-class KnightCreator : public IFigureCreator
-{
-    IFigure* createFigure( const IParam& param ){ return Knight(param); }
-};
-
-class BishopCreator : public IFigureCreator
-{
-    IFigure* createFigure( const IParam& param ){ return Bishop(param); }
-};
-
-class QueenCreator : public IFigureCreator
-{
-    IFigure* createFigure( const IParam& param ){ return Queen(param); }
-};
-
-class KingCreator : public IFigureCreator
-{
-    IFigure* createFigure( const IParam& param ){ return King(param); }
-};
-*/
 #endif // IFIGURECREATOR

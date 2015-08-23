@@ -14,7 +14,7 @@ public:
     virtual void createBoard()= 0;
     virtual void writeLog() = 0;
     virtual void getLogRecord() const = 0;
-    virtual ~IBoard();
+    virtual ~IBoard(){}
 signals:
     virtual void figureChanged(int row, int column) = 0;
 public slots:

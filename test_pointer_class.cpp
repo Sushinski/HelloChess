@@ -4,10 +4,10 @@
 
 test_pointer_class::test_pointer_class()
 {
-    cout << "test_ptr_constructor";
+    std::cout << "test_ptr_constructor";
 }
 
 test_pointer_class::~test_pointer_class()
 {
-    cout << "test_ptr_destructor";
+    std::cout << "test_ptr_destructor";
 }

@@ -17,9 +17,9 @@ SOURCES += main.cpp\
     iboard.cpp \
     ifigure.cpp \
     turnhistory.cpp \
-    test_main.cpp \
     test_pointer_class.cpp \
-    chessboard.cpp
+    chessboard.cpp \
+    graphicschessboardview.cpp
 
 HEADERS  += mainwindow.h \
     iboard.h \
@@ -27,9 +27,13 @@ HEADERS  += mainwindow.h \
     turnhistory.h \
     test_pointer_class.h \
     chessboard.h \
-    ifigurecreator.h
+    ifigurecreator.h \
+    graphicschessboardview.h
 
 FORMS    += mainwindow.ui
 
 DISTFILES += \
     tests
+
+RESOURCES += \
+    pieces.qrc
