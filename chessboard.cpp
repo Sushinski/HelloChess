@@ -62,11 +62,6 @@ void ChessBoard::getLogRecord() const
 
 }
 
-void ChessBoard::figureChanged(int row, int column)
-{
-
-}
-
 bool ChessBoard::cellClick(int row, int column)
 {
     if( row >= 0 && row < m_board_size && column >=0 && column < m_board_size )
@@ -75,20 +70,25 @@ bool ChessBoard::cellClick(int row, int column)
         // check if piece clicked for the 1st time
         IFigure& _selected = pieceAt( column, row );
         if( _selected.isClickable() )
+        {
             m_selected_piece.reset( &_selected );
-        // ToDo
-        QVector<QSize> res;
+            return true;
+        }
+        else if( !m_selected_piece )
+            return false;
+        // get possible turns
         QScopedPointer< const QList<QSize> > trns(m_board[column][row]->getPossibleTurns( column, row ));
+        // current coords
+        QSize cur_coords = m_selected_piece.data()->getCoords();
         QList<QSize>::const_iterator it;
         for(it = trns->begin(); it != trns->end(); it++)
         {
-            QSize cur_coords = turn_coords + *it;
-            if( (cur_coords.height() <= m_board_size) &&
-                (cur_coords.width() <= m_board_size)  &&
-                (cur_coords.height() > 0 ||
-                cur_coords.width() > 0 ))
-            res.append(cur_coords);
-        }
+            if( cur_coords + *it == turn_coords )
+            {
+                emit figureMoved(cur_coords, QSize(row, column));
+                return true;
+            }
+        }      
     }
-    return true;
+    return false;
 }

@@ -21,7 +21,7 @@ public:
     const IFigure& pieceAt( int x, int y ) const;
     IFigure& pieceAt( int x, int y );
 signals:
-    void figureChanged(int row, int column);
+    void figureMoved(QSize from, QSize to){}
 public slots:
     bool cellClick(int row, int column);
 };

@@ -38,6 +38,8 @@ void GraphicsChessBoardView::initView()
             }
             isWhite = !isWhite;
         }
+        QObject::connect(m_logic_board.data(), SIGNAL(figureMoved(QSize,QSize)),
+                         this, SLOT(moveGraphicPiece(QSize,QSize)));
     }
     catch(...)
     {
