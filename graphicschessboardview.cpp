@@ -49,7 +49,8 @@ void GraphicsChessBoardView::initView()
 
 void GraphicsChessBoardView::mouseReleaseEvent( QMouseEvent * event )
 {
-    QSize logic_pos = graphic_to_logic( event->pos() );
+    QPointF clk_pt = this->mapToScene(event->pos());
+    QSize logic_pos = graphic_to_logic( clk_pt.toPoint() );
     m_logic_board->cellClick( logic_pos.height(), logic_pos.width() );
 }
 
