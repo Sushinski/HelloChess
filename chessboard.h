@@ -1,16 +1,28 @@
 #ifndef CHESSBOARD_H
 #define CHESSBOARD_H
-#include "iboard.h"
+#include "ifigure.h"
+//#include "iboard.h"
 #include <QVector>
+#include <QSharedPointer>
 
-class IFigure;
-class ChessBoard : public IBoard
+
+class ChessPiece;
+class Rook;
+class Pawn;
+class Bishop;
+class Knight;
+class Queen;
+class King;
+typedef QSharedPointer<ChessPiece> PiecePtr;
+
+class ChessBoard : public QObject
 {
+    Q_OBJECT
 private:
     int m_board_size;
-    QVector< QVector< QSharedPointer<IFigure> > > m_board;
-    QSharedPointer<IFigure> m_selected_piece;
-
+    QVector< QVector< PiecePtr > > m_board;
+    PiecePtr m_selected_piece;
+    bool b_black_bottom;
 public:
     explicit ChessBoard(int board_size, QObject *parent = 0);
     void createBoard();
@@ -18,10 +30,10 @@ public:
     void getLogRecord() const;
     ~ChessBoard(){}
     inline int getBoardDim() const { return m_board_size; }
-    const IFigure& pieceAt( int x, int y ) const;
-    IFigure& pieceAt( int x, int y );
+    const PiecePtr& pieceAt( int x, int y ) const;
+    PiecePtr& pieceAt( int x, int y );
 signals:
-    void figureMoved(QSize from, QSize to){}
+    void figureMoved(QSize from, QSize to);
 public slots:
     bool cellClick(int row, int column);
 };

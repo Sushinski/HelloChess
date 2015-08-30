@@ -12,21 +12,12 @@ public:
     virtual ~IFigure(){}
     virtual const QList<QSize>* getPossibleTurns( int board_x, int board_y ) const = 0;
     const QSize& getCoords() const { return static_cast<const QSize&>(m_coords); }
-    virtual bool isClickable() { return false; }
     virtual QString getPixmapName() const = 0;
     void setCoords( const QSize& coords ){ m_coords = coords; }
 private:
     QSize m_coords;
 };
 
-class EmptyCell : public IFigure
-{
-public:
-    EmptyCell( const IParam& param ) : IFigure( param.m_coords ){}
-    ~EmptyCell(){}
-    const QList<QSize>* getPossibleTurns( int board_x, int board_y ) const { return new QList<QSize>(); }
-    virtual QString getPixmapName() const { return QString(); }
-};
 
 class ChessPiece : public IFigure
 {
@@ -37,7 +28,6 @@ public:
     ~ChessPiece(){}
     virtual const QList<QSize>* getPossibleTurns( int board_x, int board_y ) const = 0;
     virtual QString getPixmapName() const = 0;
-    virtual bool isClickable() { return true; }
     bool m_bWhite;
 };
 

@@ -33,7 +33,9 @@ void GraphicsChessBoardView::initView()
                 m_scene->addRect( x * m_cell_size, y * m_cell_size, m_cell_size, m_cell_size, QPen(Qt::black),
                                  isWhite ? QBrush(Qt::white) : QBrush(Qt::gray) );
                 // creating figure
-                m_graphic_pieces.append( createGraphicPiece(  m_logic_board->pieceAt(x, y) ) );
+                PiecePtr pc =  m_logic_board->pieceAt(x, y);
+                if( pc )
+                    m_graphic_pieces.append( createGraphicPiece( *(pc.data()) ) );
                 isWhite = !isWhite;
             }
             isWhite = !isWhite;
@@ -54,17 +56,19 @@ void GraphicsChessBoardView::mouseReleaseEvent( QMouseEvent * event )
     m_logic_board->cellClick( logic_pos.height(), logic_pos.width() );
 }
 
-PiecePtr GraphicsChessBoardView::createGraphicPiece( const IFigure& piece ) const
+GrPiecePtr GraphicsChessBoardView::createGraphicPiece( const ChessPiece& piece ) const
 {
-    PiecePtr ptr(m_scene->addPixmap(QPixmap(piece.getPixmapName())));
+    GrPiecePtr ptr(m_scene->addPixmap(QPixmap(piece.getPixmapName())));
     QPoint coords = logic_to_graphic(piece.getCoords());
-    ptr.data()->setPos( coords.x(), coords.y() );
+    ptr->setPos( coords.x(), coords.y() );
     return ptr;
 }
 
 void GraphicsChessBoardView::moveGraphicPiece( const QSize& from, const QSize& to )
 {
-    QGraphicsItem* selected = this->itemAt( logic_to_graphic( from ) );
-    selected->setPos( logic_to_graphic( to ) );
+    QPoint pt_from = logic_to_graphic( from );
+    QGraphicsItem* selected = this->itemAt( this->mapFromScene(pt_from) );
+    QPoint pt_to = this->logic_to_graphic( to );
+    selected->setPos( pt_to );
 }
 

@@ -5,12 +5,7 @@
 
 class IParam;
 class IFigure;
-class Pawn;
-class Rook;
-class Knight;
-class Bishop;
-class Queen;
-class King;
+class ChessPiece;
 
 class IParam
 {
@@ -26,19 +21,20 @@ public:
     bool m_b_white;
 };
 
-template<typename P>
-class IFigureCreator{
-public:
-    virtual QSharedPointer<IFigure> createFigure(const P& param) = 0;
-    virtual ~IFigureCreator(){}
-};
-
-
-template<typename T>
-class ChessCreator : public IFigureCreator<ChessParam>
+template<typename T1, typename T2 >
+class ICreator
 {
 public:
-    QSharedPointer<IFigure> createFigure( const ChessParam& param ){ return QSharedPointer<IFigure>(new T(param)); }
+    ICreator(){}
+    virtual ~ICreator(){}
+    virtual QSharedPointer<T1> createFigure( const T2& param ) = 0;
+};
+
+template<typename T>
+class ChessCreator : public ICreator<ChessPiece, ChessParam>
+{
+public:
+    QSharedPointer<ChessPiece> createFigure( const ChessParam& param ){ return QSharedPointer<ChessPiece>(new T(param)); }
 };
 
 #endif // IFIGURECREATOR

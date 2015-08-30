@@ -1,18 +1,20 @@
 #include "chessboard.h"
 #include "ifigurecreator.h"
 #include <QSharedPointer>
+#include <iostream>
 
 ChessBoard::ChessBoard(int board_size, QObject *parent) :
-IBoard(parent),
+QObject(parent),
 m_board_size(board_size),
 m_board(board_size)
 {
     createBoard();
+    b_black_bottom = true;
 }
 
 void ChessBoard::createBoard()
 {
-   typedef QSharedPointer< IFigureCreator<ChessParam> > PieceCreatorPtr;
+   typedef QSharedPointer< ICreator<ChessPiece, ChessParam> > PieceCreatorPtr;
     // set initial chess pieces placement
    QVector<PieceCreatorPtr> line_f_l;
    line_f_l.append( PieceCreatorPtr( new ChessCreator<Rook>() ));
@@ -24,31 +26,30 @@ void ChessBoard::createBoard()
    line_f_l.append( PieceCreatorPtr( new ChessCreator<Knight>));
    line_f_l.append( PieceCreatorPtr( new ChessCreator<Rook>));
    PieceCreatorPtr pawn_crtr( new ChessCreator<Pawn>() );
-   PieceCreatorPtr empty_cell_crtr( new ChessCreator<EmptyCell>() );
+   // PieceCreatorPtr empty_cell_crtr( new ChessCreator<EmptyCell>() );
 
-    // let black will be from top side an white - from bottom
+    // let black will be from bottom side an white - on top
+   // todo
     for( int i = 0; i < m_board_size; ++i )
     {
         m_board[0].append(line_f_l[i]->createFigure(ChessParam(QSize(i, 0), true)));
         m_board[1].append(pawn_crtr->createFigure(ChessParam(QSize(i, 1), true)));
         for( int j = 2; j < m_board_size-2; ++j )
-        {
-            m_board[j].append(empty_cell_crtr->createFigure(ChessParam(QSize(i, j), true)));
-        }
+            m_board[j].append(QSharedPointer<ChessPiece>());
         m_board[m_board_size-2].append(pawn_crtr->createFigure(ChessParam(QSize(i, m_board_size-2), false)));
         m_board[m_board_size-1].append(line_f_l[m_board_size-1-i]->createFigure(ChessParam(QSize(i, m_board_size-1), false)));
     }
 
 }
 
-IFigure& ChessBoard::pieceAt( int x, int y )
+PiecePtr& ChessBoard::pieceAt( int x, int y )
 {
-    return const_cast<IFigure&>( static_cast<const ChessBoard*>( this )->pieceAt( x, y ) );
+    return const_cast<PiecePtr&>( static_cast<const ChessBoard*>( this )->pieceAt( x, y ) );
 }
 
-const IFigure& ChessBoard::pieceAt( int x, int y ) const
+const PiecePtr& ChessBoard::pieceAt( int x, int y ) const
 {
-    return *(m_board[y][x].data());
+    return m_board[y][x];
 }
 
 
@@ -68,22 +69,23 @@ bool ChessBoard::cellClick(int row, int column)
     {
         QSize turn_coords = QSize( column, row );
         // check if piece clicked for the 1st time
-        IFigure& _selected = pieceAt( column, row );
-        if( _selected.isClickable() )
+        PiecePtr& _selected = pieceAt( column, row );
+        if( _selected )
         {
-            m_selected_piece.reset( &_selected );
+            m_selected_piece = _selected;
             return true;
         }
         else if( !m_selected_piece )
             return false;
         // get possible turns
-        QScopedPointer< const QList<QSize> > trns(m_board[column][row]->getPossibleTurns( column, row ));
+        QScopedPointer< const QList<QSize> > trns(m_selected_piece->getPossibleTurns( column, row ));
         // current coords
-        QSize cur_coords = m_selected_piece.data()->getCoords();
+        QSize cur_coords = m_selected_piece->getCoords();
         QList<QSize>::const_iterator it;
         for(it = trns->begin(); it != trns->end(); it++)
         {
-            if( cur_coords + *it == turn_coords )
+            QSize coords_sum = b_black_bottom ^ m_selected_piece->m_bWhite ? cur_coords - *it  : cur_coords + *it;
+            if( coords_sum == turn_coords )
             {
                 emit figureMoved(cur_coords, QSize(row, column));
                 return true;
