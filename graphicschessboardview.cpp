@@ -1,6 +1,7 @@
 #include "graphicschessboardview.h"
 #include "chessboard.h"
 #include <QMouseEvent>
+#include <QTransform>
 
 
 GraphicsChessBoardView::GraphicsChessBoardView( int board_size, QWidget* parent  ) :
@@ -31,7 +32,7 @@ void GraphicsChessBoardView::initView()
             {
                 // creating cell
                 m_scene->addRect( x * m_cell_size, y * m_cell_size, m_cell_size, m_cell_size, QPen(Qt::black),
-                                 isWhite ? QBrush(Qt::white) : QBrush(Qt::gray) );
+                                 isWhite ? QBrush(Qt::blue) : QBrush(Qt::gray) );
                 // creating figure
                 PiecePtr pc =  m_logic_board->pieceAt(x, y);
                 if( pc )
@@ -67,8 +68,8 @@ GrPiecePtr GraphicsChessBoardView::createGraphicPiece( const ChessPiece& piece )
 void GraphicsChessBoardView::moveGraphicPiece( const QSize& from, const QSize& to )
 {
     QPoint pt_from = logic_to_graphic( from );
-    QGraphicsItem* selected = this->itemAt( this->mapFromScene(pt_from) );
+    QList<QGraphicsItem*> selected = m_scene->items( pt_from );
     QPoint pt_to = this->logic_to_graphic( to );
-    selected->setPos( pt_to );
+    selected[1]->setPos( pt_to );
 }
 

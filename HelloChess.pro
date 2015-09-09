@@ -14,7 +14,6 @@ TEMPLATE = app
 
 SOURCES += main.cpp\
         mainwindow.cpp \
-    iboard.cpp \
     ifigure.cpp \
     turnhistory.cpp \
     test_pointer_class.cpp \
@@ -22,7 +21,6 @@ SOURCES += main.cpp\
     graphicschessboardview.cpp
 
 HEADERS  += mainwindow.h \
-    iboard.h \
     ifigure.h \
     turnhistory.h \
     test_pointer_class.h \
