@@ -13,11 +13,10 @@ class GraphicsChessBoardView : public QGraphicsView
 {
     Q_OBJECT
 private:
-
     GrPiecePtr createGraphicPiece(const ChessPiece& piece ) const;
     int m_board_size;
     int m_cell_size;
-    QVector<GrPiecePtr>m_graphic_pieces;
+    QVector< QVector<GrPiecePtr> >m_graphic_pieces;
     QSharedPointer<ChessBoard> m_logic_board;
     QSharedPointer<QGraphicsScene> m_scene;
     inline QPoint logic_to_graphic(const QSize& logic_coords) const { return QPoint( logic_coords.width() * m_cell_size, logic_coords.height() * m_cell_size ); }

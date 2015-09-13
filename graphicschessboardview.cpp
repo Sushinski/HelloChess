@@ -7,7 +7,8 @@
 GraphicsChessBoardView::GraphicsChessBoardView( int board_size, QWidget* parent  ) :
 QGraphicsView(parent),
 m_board_size(board_size),
-m_cell_size(board_size/8)
+m_cell_size(board_size/8),
+m_graphic_pieces(8)
 {
     initView();
 }
@@ -36,7 +37,9 @@ void GraphicsChessBoardView::initView()
                 // creating figure
                 PiecePtr pc =  m_logic_board->pieceAt(x, y);
                 if( pc )
-                    m_graphic_pieces.append( createGraphicPiece( *(pc.data()) ) );
+                    m_graphic_pieces[y].append( createGraphicPiece( *(pc.data()) ) );
+                else
+                    m_graphic_pieces[y].append(GrPiecePtr(0));
                 isWhite = !isWhite;
             }
             isWhite = !isWhite;
@@ -67,9 +70,10 @@ GrPiecePtr GraphicsChessBoardView::createGraphicPiece( const ChessPiece& piece )
 
 void GraphicsChessBoardView::moveGraphicPiece( const QSize& from, const QSize& to )
 {
-    QPoint pt_from = logic_to_graphic( from );
-    QList<QGraphicsItem*> selected = m_scene->items( pt_from );
+    GrPiecePtr *ptr_from = &m_graphic_pieces[from.height()][from.width()];
+    GrPiecePtr *ptr_to = &m_graphic_pieces[to.height()][to.width()];
     QPoint pt_to = this->logic_to_graphic( to );
-    selected[1]->setPos( pt_to );
+    (*ptr_from)->setPos( pt_to.x(), pt_to.y());
+    (*ptr_from).swap(*ptr_to);
 }
 

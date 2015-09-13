@@ -35,7 +35,7 @@ void ChessBoard::createBoard()
         m_board[0].append(line_f_l[i]->createFigure(ChessParam(QSize(i, 0), true)));
         m_board[1].append(pawn_crtr->createFigure(ChessParam(QSize(i, 1), true)));
         for( int j = 2; j < m_board_size-2; ++j )
-            m_board[j].append(QSharedPointer<ChessPiece>());
+            m_board[j].append(QSharedPointer<ChessPiece>(0));
         m_board[m_board_size-2].append(pawn_crtr->createFigure(ChessParam(QSize(i, m_board_size-2), false)));
         m_board[m_board_size-1].append(line_f_l[m_board_size-1-i]->createFigure(ChessParam(QSize(i, m_board_size-1), false)));
     }
@@ -72,7 +72,7 @@ bool ChessBoard::cellClick(int row, int column)
         PiecePtr& _selected = pieceAt( column, row );
         if( _selected )
         {
-            m_selected_piece = _selected;
+            m_selected_piece.swap(_selected);
             return true;
         }
         else if( !m_selected_piece )
@@ -87,7 +87,10 @@ bool ChessBoard::cellClick(int row, int column)
             QSize coords_sum = b_black_bottom ^ m_selected_piece->m_bWhite ? cur_coords - *it  : cur_coords + *it;
             if( coords_sum == turn_coords )
             {
-                emit figureMoved(cur_coords, QSize(row, column));
+                emit figureMoved(cur_coords, QSize(column, row));
+                PiecePtr &turned = pieceAt(column, row);
+                m_selected_piece->setCoords(turn_coords);
+                turned.swap(m_selected_piece);
                 return true;
             }
         }      
