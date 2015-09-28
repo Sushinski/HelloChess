@@ -6,10 +6,10 @@
 ChessBoard::ChessBoard(int board_size, QObject *parent) :
 QObject(parent),
 m_board_size(board_size),
-m_board(board_size)
+m_board(board_size),
+b_black_bottom(false)
 {
     createBoard();
-    b_black_bottom = true;
 }
 
 void ChessBoard::createBoard()
@@ -32,12 +32,12 @@ void ChessBoard::createBoard()
    // todo
     for( int i = 0; i < m_board_size; ++i )
     {
-        m_board[0].append(line_f_l[i]->createFigure(ChessParam(QSize(i, 0), true)));
-        m_board[1].append(pawn_crtr->createFigure(ChessParam(QSize(i, 1), true)));
+        m_board[0].append(line_f_l[i]->createFigure(ChessParam(QSize(i, 0), b_black_bottom)));
+        m_board[1].append(pawn_crtr->createFigure(ChessParam(QSize(i, 1), b_black_bottom)));
         for( int j = 2; j < m_board_size-2; ++j )
             m_board[j].append(QSharedPointer<ChessPiece>(0));
-        m_board[m_board_size-2].append(pawn_crtr->createFigure(ChessParam(QSize(i, m_board_size-2), false)));
-        m_board[m_board_size-1].append(line_f_l[m_board_size-1-i]->createFigure(ChessParam(QSize(i, m_board_size-1), false)));
+        m_board[m_board_size-2].append(pawn_crtr->createFigure(ChessParam(QSize(i, m_board_size-2), !b_black_bottom)));
+        m_board[m_board_size-1].append(line_f_l[m_board_size-1-i]->createFigure(ChessParam(QSize(i, m_board_size-1), !b_black_bottom)));
     }
 
 }
@@ -84,10 +84,10 @@ bool ChessBoard::cellClick(int row, int column)
         QList<QSize>::const_iterator it;
         for(it = trns->begin(); it != trns->end(); it++)
         {
-            QSize coords_sum = b_black_bottom ^ m_selected_piece->m_bWhite ? cur_coords - *it  : cur_coords + *it;
+            QSize coords_sum = b_black_bottom ^ m_selected_piece->m_bWhite ? cur_coords - (*it)  : cur_coords + (*it);
             if( coords_sum == turn_coords )
             {
-                emit figureMoved(cur_coords, QSize(column, row));
+                emit figureMoved(cur_coords, turn_coords);
                 PiecePtr &turned = pieceAt(column, row);
                 m_selected_piece->setCoords(turn_coords);
                 turned.swap(m_selected_piece);
