@@ -68,9 +68,6 @@ void GraphicsChessBoardView::mouseReleaseEvent( QMouseEvent * event )
 GrPiecePtr GraphicsChessBoardView::createGraphicPiece( const ChessPiece& piece ) const
 {
     GrPiecePtr ptr(m_scene->addPixmap(QPixmap(piece.getPixmapName())));
-    //ptr->setFlag(QGraphicsItem::ItemIsMovable);
-    //ptr->setFlag(QGraphicsItem::ItemSendsScenePositionChanges);
-    //ptr->setCacheMode(QGraphicsItem::ItemCoordinateCache);
     QPoint coords = logic_to_graphic(piece.getCoords());
     ptr->setPos( coords.x(), coords.y() );
     ptr->setVisible(true);

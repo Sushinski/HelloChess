@@ -18,7 +18,8 @@ SOURCES += main.cpp\
     turnhistory.cpp \
     test_pointer_class.cpp \
     chessboard.cpp \
-    graphicschessboardview.cpp
+    graphicschessboardview.cpp \
+    logger.cpp
 
 HEADERS  += mainwindow.h \
     ifigure.h \
@@ -26,7 +27,8 @@ HEADERS  += mainwindow.h \
     test_pointer_class.h \
     chessboard.h \
     ifigurecreator.h \
-    graphicschessboardview.h
+    graphicschessboardview.h \
+    logger.h
 
 FORMS    += mainwindow.ui
 
